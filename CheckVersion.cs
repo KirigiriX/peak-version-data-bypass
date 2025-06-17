@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Zorro.Core;
 
-// Token: 0x02000056 RID: 86
 public static partial class CloudAPI
 {
     public static void CheckVersion(Action<LoginResponse> response)
