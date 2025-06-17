@@ -10,7 +10,7 @@
 
 This cute little repo hosts a public JSON file used by the Unity game **PEAK** to:
 
-- 🩷 Check if players have the correct game version
+- 🩷 Bypasses all the version checks
 - 💌 Show friendly update messages and patch notes
 
 All done in a **graceful**, **lightweight**, and **fully customizable** way!
