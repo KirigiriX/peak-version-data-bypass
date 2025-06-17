@@ -1,8 +1,8 @@
 {
   "VersionOkay": true,
-  "HoursUntilLevel": 0,
-  "MinutesUntilLevel": 15,
-  "SecondsUntilLevel": 0,
+  "HoursUntilLevel": 99999999,
+  "MinutesUntilLevel": 99999999,
+  "SecondsUntilLevel": 99999999,
   "LevelIndex": 3,
   "Message": "Kirigiri Love you <3"
 }
