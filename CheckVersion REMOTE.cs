@@ -9,7 +9,7 @@ public static partial class CloudAPI
     {
         GameHandler.AddStatus<QueryingGameTimeStatus>(new QueryingGameTimeStatus());
 
-        string url = "https://raw.githubusercontent.com/KirigiriX/peak-version-data-bypass/refs/heads/main/version.json"; // ⬅️ Replace this with your real GitHub raw URL
+        string url = "https://raw.githubusercontent.com/KirigiriX/peak-version-data-bypass/refs/heads/main/version.json";
 
         Debug.Log("Sending GET Request to: " + url);
 
