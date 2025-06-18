@@ -13,7 +13,7 @@ public static partial class CloudAPI
             HoursUntilLevel = 1337,
             MinutesUntilLevel = 1337,
             SecondsUntilLevel = 1337,
-            LevelIndex = 3,
+            LevelIndex = 4,
             Message = "Made with <3 By Kirigiri \nhttps://discord.gg/P5cDx4Fyfc"
         };
 
