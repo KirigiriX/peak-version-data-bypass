@@ -9,7 +9,6 @@ public static partial class CloudAPI
 	{
 		GameHandler.AddStatus<QueryingGameTimeStatus>(new QueryingGameTimeStatus());
 
-		// Get the full path to "server.txt" next to the .exe
 		string filePath = Path.Combine(Application.dataPath, "..", "Kirigiri", "server.txt");
 		string text;
 
