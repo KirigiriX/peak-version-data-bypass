@@ -1,9 +1,8 @@
 {
     "VersionOkay": true,
-    "HoursUntilLevel": 0,
-    "MinutesUntilLevel": 15,
-    "SecondsUntilLevel": 0,
+    "HoursUntilLevel": 1337,
+    "MinutesUntilLevel": 1337,
+    "SecondsUntilLevel": 1337,
     "LevelIndex": 7,
     "Message": "Made with <3 By Kirigiri",
-    "LastUpdated": "2025-06-19T01:47:00Z"
 }
