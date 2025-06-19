@@ -2,7 +2,7 @@ name: Update LevelIndex every 5 minutes
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # toutes les 5 minutes
+    - cron: '*/1 * * * *'  # toutes les 5 minutes
   workflow_dispatch:
 
 permissions:
