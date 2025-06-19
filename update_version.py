@@ -28,7 +28,7 @@ if time_since_update >= timedelta(minutes=20):
     print(f"LevelIndex incremented to {level_index} and timer reset to 20m 0s")
 
 # Sinon, si pas incrémenté, décrémente Minutes/Seconds toutes les 5 minutes
-elif time_since_update >= timedelta(minutes=5):
+elif time_since_update >= timedelta(minutes=3):
     total_seconds = minutes * 60 + seconds
     total_seconds -= 5 * 60  # décrémente 5 minutes
 
