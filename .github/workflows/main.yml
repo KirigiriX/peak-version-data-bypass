@@ -1,8 +1,8 @@
-name: Update LevelIndex every 5 minutes with Slack notification
+name: Update LevelIndex every 5 minutes
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # toutes les 20 minutes
+    - cron: '*/5 * * * *'  # toutes les 5 minutes
   workflow_dispatch:
 
 permissions:
@@ -31,12 +31,3 @@ jobs:
           git add version.json
           git diff --cached --quiet || git commit -m "Auto update LevelIndex"
           git push
-
-      - name: Notify Slack
-        if: always()  # toujours envoyer, succès ou échec
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,commit,message,author
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
