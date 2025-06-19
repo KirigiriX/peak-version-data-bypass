@@ -1,6 +1,9 @@
 name: Update LevelIndex every 5 minutes
 
 on:
+  push:
+      branches:
+        - main
   schedule:
     - cron: '*/5 * * * *'  # toutes les 5 minutes
   workflow_dispatch:
@@ -11,17 +14,9 @@ permissions:
 jobs:
   update-level:
     runs-on: ubuntu-latest
-    concurrency:
-      group: update-level
-      cancel-in-progress: false
-  
+    concurrency: update-level
 
     steps:
-    
-      - name: Set Timezone
-        uses: szenius/set-timezone@v2.0
-        with: 
-          timezoneLinux: "Europe/Paris"
     
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,7 +24,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '3.x'
 
       - name: Run update script
         run: python update_version.py
