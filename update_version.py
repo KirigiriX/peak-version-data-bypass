@@ -9,7 +9,7 @@ with open(FILENAME, "r") as f:
 last_updated = datetime.fromisoformat(data["LastUpdated"].replace("Z", "+00:00"))
 now = datetime.now(timezone.utc)
 
-minutes = data.get("MinutesUntilLevel", 0)
+minutes = data.get("MinutesUntilLevel", 20)
 seconds = data.get("SecondsUntilLevel", 0)
 level_index = data.get("LevelIndex", 0)
 
