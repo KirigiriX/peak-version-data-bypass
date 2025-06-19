@@ -16,7 +16,7 @@ level_index = data.get("LevelIndex", 0)
 time_since_update = now - last_updated
 
 # Flag pour savoir si on a fait une mise à jour du LevelIndex ou du timer
-data_updated = False
+data_updated = True
 
 # Incrémente LevelIndex toutes les 20 minutes pile
 if time_since_update >= timedelta(minutes=20):
