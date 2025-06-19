@@ -3,6 +3,7 @@ name: Update LevelIndex every 5 minutes
 on:
   schedule:
     - cron: '*/5 * * * *'  # toutes les 5 minutes
+  workflow_dispatch:
 
 permissions:
   contents: write         # pour pouvoir commit/push les changements
@@ -10,7 +11,10 @@ permissions:
 jobs:
   update-level:
     runs-on: ubuntu-latest
-    concurrency: update-level
+    concurrency:
+      group: update-level
+      cancel-in-progress: false
+  
 
     steps:
     
@@ -36,6 +40,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add version.json
           git diff --staged --quiet || git commit -m "Auto update LevelIndex [skip ci]"
-          git commit -am "Automatic updates"
           git push origin main
 
