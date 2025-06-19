@@ -1,10 +1,8 @@
 import time
 import json
 
-# Chemin vers ton fichier existant
 json_file = "version.json"
 
-# Liste de messages à faire défiler
 messages = [
     "Made with love by Kirigiri",
     "You're amazing, keep it up",
@@ -43,21 +41,17 @@ def reset_timer(data):
     data["MinutesUntilLevel"] = 60
     data["SecondsUntilLevel"] = 0
 
-# Compteur pour changer le message toutes les 2 minutes
 seconds_since_last_message_change = 0
 message_index = 0
 
-# Boucle principale
 while True:
     data = load_data()
     display(data)
 
     time.sleep(1)
 
-    # Gestion du temps
     if data["SecondsUntilLevel"] == 0:
         if data["MinutesUntilLevel"] == 0:
-            # Niveau atteint
             data["LevelIndex"] += 1
             reset_timer(data)
         else:
@@ -66,9 +60,8 @@ while True:
     else:
         data["SecondsUntilLevel"] -= 1
 
-    # Gestion du changement de message
     seconds_since_last_message_change += 1
-    if seconds_since_last_message_change >= 1200:  # 2 minutes
+    if seconds_since_last_message_change >= 1200:
         message_index = (message_index + 1) % len(messages)
         data["Message"] = messages[message_index]
         seconds_since_last_message_change = 0
