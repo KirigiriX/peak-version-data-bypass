@@ -16,8 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: update-level
 
-    steps:
-    
+    steps:    
       - name: Checkout repository
         uses: actions/checkout@v4
 
