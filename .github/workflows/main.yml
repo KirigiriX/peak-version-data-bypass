@@ -2,7 +2,7 @@ name: Update LevelIndex every 20 minutes
 
 on:
   schedule:
-    - cron: '*/20 * * * *'   # toutes les 20 minutes
+    - cron: '*/7 * * * *'   # toutes les 20 minutes
   workflow_dispatch:         # possibilité de lancer manuellement
 
 jobs:
