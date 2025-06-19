@@ -6,30 +6,45 @@ FILENAME = "version.json"
 with open(FILENAME, "r") as f:
     data = json.load(f)
 
-# Convert last updated to datetime aware
 last_updated = datetime.fromisoformat(data["LastUpdated"].replace("Z", "+00:00"))
 now = datetime.now(timezone.utc)
 
-# Check if at least 1 minute passed
-if (now - last_updated) >= timedelta(minutes=1):
-    # Decrease MinutesUntilLevel by 1
-    minutes = data.get("MinutesUntilLevel", 0)
-    hours = data.get("HoursUntilLevel", 0)
+minutes = data.get("MinutesUntilLevel", 0)
+seconds = data.get("SecondsUntilLevel", 0)
+level_index = data.get("LevelIndex", 0)
 
-    if minutes > 0:
-        minutes -= 1
-    else:
-        if hours > 0:
-            hours -= 1
-            minutes = 59
+time_since_update = now - last_updated
 
-    data["MinutesUntilLevel"] = minutes
-    data["HoursUntilLevel"] = hours
-    data["LastUpdated"] = now.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+# Flag pour savoir si on a fait une mise à jour du LevelIndex
+level_updated = False
 
-    with open(FILENAME, "w") as f:
-        json.dump(data, f, indent=4)
+# Incrémente LevelIndex toutes les 20 minutes
+if time_since_update >= timedelta(minutes=20):
+    level_index += 1
+    # Reset timer à 20 minutes pile
+    minutes = 20
+    seconds = 0
+    last_updated = now
+    level_updated = True
+    print(f"LevelIndex incremented to {level_index} and timer reset to 20m 0s")
 
-    print(f"Countdown updated: {hours}h {minutes}m")
+# Sinon, si pas incrémenté, décrémente Minutes/Seconds toutes les 5 minutes
+elif time_since_update >= timedelta(minutes=5):
+    total_seconds = minutes * 60 + seconds
+    total_seconds -= 5 * 60  # décrémente 5 minutes
+    if total_seconds < 0:
+        total_seconds = 0
+    minutes = total_seconds // 60
+    seconds = total_seconds % 60
+    print(f"Countdown updated: {minutes}m {seconds}s")
 else:
-    print("Less than 1 minute since last update. No change.")
+    print("Less than 5 minutes since last update. No change.")
+
+# Mise à jour des données
+data["MinutesUntilLevel"] = minutes
+data["SecondsUntilLevel"] = seconds
+data["LevelIndex"] = level_index
+data["LastUpdated"] = last_updated.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+with open(FILENAME, "w") as f:
+    json.dump(data, f, indent=4)
