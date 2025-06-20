@@ -1,8 +1,10 @@
 import time
 import json
+import os
 
-json_file = "version.json"
-
+SAVE_FILE = "version.json"
+LEVEL_UP_TOTAL_MINUTES = 60
+MESSAGE_CHANGE_SECONDS = 1200
 messages = [
     "Made with love by Kirigiri",
     "You're amazing, keep it up",
@@ -26,44 +28,87 @@ messages = [
     "Your kindness is your superpower"
 ]
 
+def get_default_data():
+    hours, minutes = divmod(LEVEL_UP_TOTAL_MINUTES, 60)
+    return {
+        "VersionOkay": True,
+        "HoursUntilLevel": hours,
+        "MinutesUntilLevel": minutes,
+        "SecondsUntilLevel": 0,
+        "LevelIndex": 1,
+        "Message": MESSAGES[0],
+        "MessageIndex": 0
+    }
+
 def load_data():
-    with open(json_file, "r") as f:
-        return json.load(f)
+    if not os.path.exists(SAVE_FILE):
+        return get_default_data()
+    try:
+        with open(SAVE_FILE, "r") as f:
+            data = json.load(f)
+        if 'MessageIndex' not in data:
+            try:
+                data['MessageIndex'] = MESSAGES.index(data['Message'])
+            except ValueError:
+                data['MessageIndex'] = 0
+        return data
+    except (json.JSONDecodeError, IOError):
+        print("Error reading save file. Using default data.")
+        return get_default_data()
 
 def save_data(data):
-    with open(json_file, "w") as f:
-        json.dump(data, f, indent=4)
+    try:
+        with open(SAVE_FILE, "w") as f:
+            json.dump(data, f, indent=4)
+    except IOError as e:
+        print(f"Error saving data: {e}")
 
 def display(data):
-    print(f"Level: {data['LevelIndex']} | Temps restant: {data['MinutesUntilLevel']:02}:{data['SecondsUntilLevel']:02} | Message: {data['Message']}")
+    print(
+        f"\rLevel: {data['LevelIndex']} | "
+        f"Time Left: {data.get('HoursUntilLevel', 0):02}:{data['MinutesUntilLevel']:02}:{data['SecondsUntilLevel']:02} | "
+        f"Message: {data['Message']}",
+        end=""
+    )
 
 def reset_timer(data):
-    data["MinutesUntilLevel"] = 60
+    hours, minutes = divmod(LEVEL_UP_TOTAL_MINUTES, 60)
+    data["HoursUntilLevel"] = hours
+    data["MinutesUntilLevel"] = minutes
     data["SecondsUntilLevel"] = 0
 
-seconds_since_last_message_change = 0
-message_index = 0
-
-while True:
+def main():
     data = load_data()
-    display(data)
+    message_timer = 0
+    try:
+        while True:
+            display(data)
+            time.sleep(1)
+            needs_save = False
+            data['SecondsUntilLevel'] -= 1
+            if data['SecondsUntilLevel'] < 0:
+                data['SecondsUntilLevel'] = 59
+                data['MinutesUntilLevel'] -= 1
+                if data['MinutesUntilLevel'] < 0:
+                    data['MinutesUntilLevel'] = 59
+                    data['HoursUntilLevel'] = data.get('HoursUntilLevel', 1) - 1
+            if data.get('HoursUntilLevel', 0) < 0:
+                data['LevelIndex'] += 1
+                reset_timer(data)
+                print(f"\Reached level {data['LevelIndex']}.")
+                needs_save = True
+            message_timer += 1
+            if message_timer >= MESSAGE_CHANGE_SECONDS:
+                new_index = (data.get('MessageIndex', 0) + 1) % len(MESSAGES)
+                data['MessageIndex'] = new_index
+                data['Message'] = MESSAGES[new_index]
+                message_timer = 0
+                needs_save = True
+            if needs_save:
+                save_data(data)
+    except KeyboardInterrupt:
+        print("\n\Exiting. Saving...")
+        save_data(data)
 
-    time.sleep(1)
-
-    if data["SecondsUntilLevel"] == 0:
-        if data["MinutesUntilLevel"] == 0:
-            data["LevelIndex"] += 1
-            reset_timer(data)
-        else:
-            data["MinutesUntilLevel"] -= 1
-            data["SecondsUntilLevel"] = 59
-    else:
-        data["SecondsUntilLevel"] -= 1
-
-    seconds_since_last_message_change += 1
-    if seconds_since_last_message_change >= 1200:
-        message_index = (message_index + 1) % len(messages)
-        data["Message"] = messages[message_index]
-        seconds_since_last_message_change = 0
-
-    save_data(data)
+if __name__ == "__main__":
+    main()
