@@ -84,7 +84,6 @@ def main():
         while True:
             display(data)
             time.sleep(1)
-            needs_save = False
             data['SecondsUntilLevel'] -= 1
             if data['SecondsUntilLevel'] < 0:
                 data['SecondsUntilLevel'] = 59
@@ -96,18 +95,15 @@ def main():
                 data['LevelIndex'] += 1
                 reset_timer(data)
                 print(f"\Reached level {data['LevelIndex']}.")
-                needs_save = True
             message_timer += 1
             if message_timer >= MESSAGE_CHANGE_SECONDS:
                 new_index = (data.get('MessageIndex', 0) + 1) % len(MESSAGES)
                 data['MessageIndex'] = new_index
                 data['Message'] = MESSAGES[new_index]
                 message_timer = 0
-                needs_save = True
-            if needs_save:
-                save_data(data)
+            save_data(data)
     except KeyboardInterrupt:
-        print("\n\Exiting. Saving...")
+        print("\n\nExiting. Saving final state...")
         save_data(data)
 
 if __name__ == "__main__":
