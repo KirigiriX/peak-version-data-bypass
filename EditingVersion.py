@@ -5,7 +5,7 @@ import os
 SAVE_FILE = "version.json"
 LEVEL_UP_TOTAL_MINUTES = 60
 MESSAGE_CHANGE_SECONDS = 1200
-messages = [
+MESSAGES = [
     "Made with love by Kirigiri",
     "You're amazing, keep it up",
     "A little moment of softness",
